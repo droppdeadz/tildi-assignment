@@ -52,12 +52,29 @@ watch(loader, (value) => {
       </v-app-bar>
       <v-main>
         <v-container>
-          <div class="max-w-screen-md mx-auto">
+          <div class="max-w-screen-md mx-auto mb-[56px]">
             <NuxtPage />
           </div>
         </v-container>
       </v-main>
     </v-layout>
+    <v-bottom-navigation
+      color="info"
+      grow
+      mandatory
+    >
+      <v-btn value="shelves" to="/">
+        <v-icon>mdi-cart</v-icon>
+        
+        <span>Shelves</span>
+      </v-btn>
+
+      <v-btn value="admin" to="/admin">
+        <v-icon>mdi-account-key</v-icon>
+
+        <span>Admin</span>
+      </v-btn>
+    </v-bottom-navigation>
     <v-overlay v-model="loader" class="align-center justify-center">
       <v-progress-circular
         :rotate="360"

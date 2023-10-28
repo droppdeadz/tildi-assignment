@@ -135,7 +135,7 @@ useHead({
         cols="6"
         sm="4"
       >
-        <image-log :image="image" />
+        <image-history-card :image="image" />
       </v-col>
     </v-row>
   </div>

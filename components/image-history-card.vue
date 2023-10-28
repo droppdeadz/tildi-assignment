@@ -9,6 +9,15 @@ const props = defineProps({
 });
 
 const dialog = ref(false);
+const color = computed(() => {
+  if (props.image.status === 'rejected') {
+    return 'error';
+  } else if (props.image.status === 'pending') {
+    return 'warning';
+  } else {
+    return 'success';
+  }
+});
 
 const openDialog = () => {
   dialog.value = true;
@@ -30,10 +39,11 @@ const openDialog = () => {
     </div>
     <div class="absolute bottom-3 left-3">
       <v-chip
-      color="success"
+      :color="color"
       size="small"
       variant="elevated"
       elevation="0"
+      class="capitalize"
     >
       {{ image.status }}
     </v-chip>

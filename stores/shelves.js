@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import uniqueId from 'lodash/uniqueId';
 
 export const useShelvesStore = defineStore('shelves', {
   state: () => ({
@@ -38,6 +39,16 @@ export const useShelvesStore = defineStore('shelves', {
     getShelveById: (state) => {
       return (id) => state.shelves.find((shelve) => shelve.id === Number(id))
     },
+    getAllImages: (state) => {
+      return state.shelves.map((shelve) => {
+        return shelve.images.map((image) => {
+          return {
+            ...image,
+            id: shelve.id,
+          }
+        })
+      }).flat();
+    }
   },
   actions: {
     selectedShelve(shelve) {
@@ -45,11 +56,30 @@ export const useShelvesStore = defineStore('shelves', {
     },
     addedImages(images) {
       const payload = {
+        uuid: uniqueId('image_'),
         image: images,
         uploadDate: new Date(),
-        status: 'success',
+        status: 'pending',
       }
       this.shelve.images.push(payload);
+    },
+    approveImage(shelveId, image) {
+      const shelve = this.getShelveById(shelveId);
+      shelve.images.map((img) => {
+        if (img.uuid === image.uuid) {
+          img.status = 'approved';
+          return img;
+        }
+      });
+    },
+    rejectImage(shelveId, image) {
+      const shelve = this.getShelveById(shelveId);
+      shelve.images.map((img) => {
+        if (img.uuid === image.uuid) {
+          img.status = 'rejected';
+          return img;
+        }
+      });
     }
   },
 })
