@@ -58,6 +58,13 @@ watch(loader, (value) => {
     file.value = null;
   }
 });
+
+useHead({
+  title: `Tildi Assignment - ${shelve.name}`,
+  meta: [
+    { name: 'description', content: 'Tildi assignment project.' }
+  ],
+});
 </script>
 
 <template>
