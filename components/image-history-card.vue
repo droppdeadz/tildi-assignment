@@ -52,6 +52,7 @@ const openDialog = () => {
   <v-dialog
     v-model="dialog"
     persistent
+    max-width="500"
   >
     <div class="relative">
       <v-card>

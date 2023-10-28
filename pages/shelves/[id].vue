@@ -129,8 +129,12 @@ useHead({
   </v-card>
   <div class="py-5">
     <p class="font-extrabold text-xl mb-3">History</p>
-    <v-row dense="">
+    <v-row dense>
+      <v-col cols="12" v-if="shelve.images.length === 0">
+        No images found
+      </v-col>
       <v-col
+        v-else
         :key="`${idx} - ${Math.random() * 10}`" v-for="(image, idx) in shelve.images"
         cols="6"
         sm="4"

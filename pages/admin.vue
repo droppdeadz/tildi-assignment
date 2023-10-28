@@ -113,6 +113,7 @@ const openDialog = (image) => {
       v-if="imageSelect"
       v-model="dialog"
       persistent
+      max-width="500"
     >
       <div class="relative">
         <v-card>
