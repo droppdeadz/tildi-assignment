@@ -80,13 +80,20 @@ useHead({
       <v-col cols="12">
         <v-card>
           <div class="relative">
-            <v-img
-              ref="image"
-              :src="previewImage"
-              cover
-              class="md:h-[500px] h-[250px]"
-              @click="fileInput.click()"
-            ></v-img>
+            <div @click="fileInput.click()">
+              <v-img
+                v-if="previewImage.isSelected"
+                :src="previewImage"
+                cover
+                class="md:h-[500px] h-[250px]"
+              ></v-img>
+              <div
+                v-else
+                class="h-[250px] w-full flex justify-center items-center"
+              >
+                <p class="text-2xl">Click to select file.</p>
+              </div>
+            </div>
             <div v-if="previewImage.isSelected" class=" absolute top-2 right-2">
               <v-btn
                 color="grey-darken-3"
@@ -96,18 +103,14 @@ useHead({
               </v-btn>
             </div>
           </div>
-          <div class="p-3">
-            <v-file-input
-              ref="fileInput"
-              v-model="file"
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Pick an avatar"
-              prepend-icon="mdi-camera"
-              label="Upload image"
-              hide-details
-              @change="onSelectImage"
-            ></v-file-input>
-          </div>
+          <v-file-input
+            ref="fileInput"
+            v-model="file"
+            accept="image/png, image/jpeg, image/bmp"
+            hide-details
+            class="!hidden"
+            @change="onSelectImage"
+          ></v-file-input>
           <div class="p-3">
             <v-btn
               prepend-icon="mdi-upload"

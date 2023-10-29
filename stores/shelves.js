@@ -8,28 +8,24 @@ export const useShelvesStore = defineStore('shelves', {
         id: 1,
         name: 'Beverage',
         image: '/images/beverages.jpg',
-        products: 0,
         images: [],
       },
       {
         id: 2,
         name: 'Snacks',
         image: '/images/snacks.webp',
-        products: 0,
         images: [],
       },
       {
         id: 3,
         name: 'Cosmetics',
         image: '/images/cosmetics.jpg',
-        products: 0,
         images: [],
       },
       {
         id: 4,
         name: 'Foods',
         image: '/images/foods.jpg',
-        products: 0,
         images: [],
       }
     ],
@@ -51,6 +47,9 @@ export const useShelvesStore = defineStore('shelves', {
     }
   },
   actions: {
+    addedShelves(shelve) {
+      this.shelves.push(shelve);
+    },
     selectedShelve(shelve) {
       this.shelve = shelve;
     },
@@ -65,19 +64,17 @@ export const useShelvesStore = defineStore('shelves', {
     },
     approveImage(shelveId, image) {
       const shelve = this.getShelveById(shelveId);
-      shelve.images.map((img) => {
+      shelve.images.forEach((img) => {
         if (img.uuid === image.uuid) {
           img.status = 'approved';
-          return img;
         }
       });
     },
     rejectImage(shelveId, image) {
       const shelve = this.getShelveById(shelveId);
-      shelve.images.map((img) => {
+      shelve.images.forEach((img) => {
         if (img.uuid === image.uuid) {
           img.status = 'rejected';
-          return img;
         }
       });
     }

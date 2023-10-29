@@ -1,20 +1,24 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useLoaderStore } from '@/stores/loader'
+import { useShelvesStore } from '@/stores/shelves'
+import uniqueId from 'lodash/uniqueId';
 
-const store = useLoaderStore();
-const { getLoader } = storeToRefs(store);
+const loaderStore = useLoaderStore();
+const shelveStore = useShelvesStore();
+const { getLoader } = storeToRefs(loaderStore);
 
 const interval = ref(null);
 const loaderProgress = ref(0);
+const addShelveDialog = ref(false);
 
 const loader = computed(() => getLoader.value);
 
 const onShowLoader = () => {
-  store.showLoader();
+  loaderStore.showLoader();
   interval.value = setInterval(() => {
     if (loaderProgress.value >= 100) {
-      store.hideLoader();
+      loaderStore.hideLoader();
     }
 
     const temp = loaderProgress.value + Math.floor(Math.random() * 100);
@@ -25,6 +29,15 @@ const onShowLoader = () => {
       loaderProgress.value = temp;
     }
   }, 500);
+}
+
+const onAddShelve = (shelve) => {
+  shelveStore.addedShelves({
+    ...shelve,
+    images: [],
+    id: uniqueId(),
+  });
+  addShelveDialog.value = false;
 }
 
 watch(loader, (value) => {
@@ -49,6 +62,13 @@ watch(loader, (value) => {
             TILDI Assignment
           </nuxt-link>
         </v-app-bar-title>
+        <v-btn
+          size="small"
+          icon="mdi-cart-plus"
+          variant="tonal"
+          color="info"
+          @click="() => addShelveDialog = true"
+        />
       </v-app-bar>
       <v-main>
         <v-container>
@@ -86,6 +106,11 @@ watch(loader, (value) => {
         <template v-slot:default> {{ loaderProgress }} % </template>
       </v-progress-circular>
     </v-overlay>
+    <add-category-dialog
+      :dialog="addShelveDialog"
+      @add="onAddShelve"
+      @close="addShelveDialog = false"
+    />
   </v-app>
 </template>
 

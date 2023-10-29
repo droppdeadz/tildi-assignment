@@ -28,7 +28,7 @@ const openDialog = (image) => {
 
 <template>
   <div>
-    <v-table
+    <!-- <v-table
       density="compact"
       hover
     >
@@ -53,7 +53,7 @@ const openDialog = (image) => {
             :key="`${getUnixTime(item.uploadDate)}`"
           >
             <td>
-              <div class="aspect-square overflow-hidden max-h-20 my-2" @click="() => openDialog(item)">
+              <div class="aspect-square rounded overflow-hidden max-h-20 my-2" @click="() => openDialog(item)">
                 <v-img
                   :src="item.image"
                   cover
@@ -62,13 +62,7 @@ const openDialog = (image) => {
               </div>
             </td>
             <td class="whitespace-nowrap px-1">
-              <v-chip
-                size="small"
-                variant="elevated"
-                elevation="0"
-              >
-              {{ format(item.uploadDate, 'MM/dd/yyyy, HH:mm') }}
-              </v-chip>
+              <p class="text-sm">{{ format(item.uploadDate, 'MM/dd/yyyy, HH:mm') }}</p>
             </td>
             <td class="text-center px-1">
               <v-chip
@@ -108,7 +102,7 @@ const openDialog = (image) => {
           </td>
         </tr>
       </tbody>
-    </v-table>
+    </v-table> -->
     <v-dialog
       v-if="imageSelect"
       v-model="dialog"
