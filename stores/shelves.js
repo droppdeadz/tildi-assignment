@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useToastStore } from '@/stores/toast'
 import uniqueId from 'lodash/uniqueId';
 
 export const useShelvesStore = defineStore('shelves', {
@@ -29,33 +30,37 @@ export const useShelvesStore = defineStore('shelves', {
         images: [],
       }
     ],
-    shelve: {},
+    shelf: {},
   }),
   getters: {
     getShelves: (state) =>  {
       return state.shelves;
     },
-    getShelveById: (state) => {
-      return (id) => state.shelves.find((shelve) => shelve.id === id)
+    getShelfById: (state) => {
+      return (id) => state.shelves.find((shelf) => shelf.id === id)
     },
     getAllImages: (state) => {
-      return state.shelves.map((shelve) => {
-        return shelve.images.map((image) => {
+      return state.shelves.map((shelf) => {
+        return shelf.images.map((image) => {
           return {
             ...image,
-            id: shelve.id,
+            id: shelf.id,
           }
         })
       }).flat();
     }
   },
   actions: {
-    addedShelves(shelve) {
-      if (this.shelves.some((s) => String(s.name).toLowerCase() == String(shelve.name).toLowerCase())) return;
-      this.shelves.push(shelve);
+    addedShelf(shelf) {
+      const toastStore = useToastStore();
+      if (this.shelves.some((s) => String(s.name).toLowerCase() == String(shelf.name).toLowerCase())) {
+        return toastStore.showToast('Cannot added shelf', 'error');
+      };
+      this.shelves.push(shelf);
+      toastStore.showToast('Shelf added successfully', 'success');
     },
-    selectedShelve(shelve) {
-      this.shelve = shelve;
+    selectedShelf(shelf) {
+      this.shelf = shelf;
     },
     addedImages(images) {
       const payload = {
@@ -64,19 +69,19 @@ export const useShelvesStore = defineStore('shelves', {
         uploadDate: new Date(),
         status: 'pending',
       }
-      this.shelve.images.push(payload);
+      this.shelf.images.push(payload);
     },
-    approveImage(shelveId, image) {
-      const shelve = this.getShelveById(shelveId);
-      shelve.images.forEach((img) => {
+    approveImage(shelfId, image) {
+      const shelf = this.getShelfById(shelfId);
+      shelf.images.forEach((img) => {
         if (img.uuid === image.uuid) {
           img.status = 'approved';
         }
       });
     },
-    rejectImage(shelveId, image) {
-      const shelve = this.getShelveById(shelveId);
-      shelve.images.forEach((img) => {
+    rejectImage(shelfId, image) {
+      const shelf = this.getShelfById(shelfId);
+      shelf.images.forEach((img) => {
         if (img.uuid === image.uuid) {
           img.status = 'rejected';
         }

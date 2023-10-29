@@ -13,10 +13,10 @@ useHead({
 <template>
   <v-row>
     <v-col
-      :key="shelve.id" v-for="(shelve) in shelves"
+      :key="shelf.id" v-for="(shelf) in shelves"
       cols="12"
     >
-      <bay-card :shelve="shelve" /> 
+      <bay-card :shelf="shelf" /> 
     </v-col>
   </v-row>
 </template>

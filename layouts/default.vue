@@ -2,18 +2,22 @@
 import { storeToRefs } from 'pinia'
 import { useLoaderStore } from '@/stores/loader'
 import { useShelvesStore } from '@/stores/shelves'
+import { useToastStore } from '@/stores/toast'
 import uniqueId from 'lodash/uniqueId';
 
 const router = useRouter();
 const loaderStore = useLoaderStore();
-const shelveStore = useShelvesStore();
+const shelfStore = useShelvesStore();
+const toastStore = useToastStore();
 const { getLoader } = storeToRefs(loaderStore);
+const { getToast } = storeToRefs(toastStore);
 
 const interval = ref(null);
 const loaderProgress = ref(0);
-const addShelveDialog = ref(false);
+const addShelfDialog = ref(false);
 
 const loader = computed(() => getLoader.value);
+const toast = computed(() => getToast.value);
 
 const onShowLoader = () => {
   loaderStore.showLoader();
@@ -32,13 +36,13 @@ const onShowLoader = () => {
   }, 500);
 }
 
-const onAddShelve = (shelve) => {
-  shelveStore.addedShelves({
-    ...shelve,
+const onAddShelf = (shelf) => {
+  shelfStore.addedShelf({
+    ...shelf,
     images: [],
     id: `new_${uniqueId()}`,
   });
-  addShelveDialog.value = false;
+  addShelfDialog.value = false;
   router.push('/');
 }
 
@@ -57,6 +61,13 @@ watch(loader, (value) => {
 
 <template>
   <v-app>
+    <v-snackbar
+      v-model="toast.open"
+      :color="toast.type"
+      :timeout="2000"
+      location="top"
+      vertical=""
+    >{{ toast.message }}</v-snackbar>
     <v-layout>
       <v-app-bar density="compact" elevation="1">
         <v-app-bar-title>
@@ -69,7 +80,7 @@ watch(loader, (value) => {
           icon="mdi-cart-plus"
           variant="tonal"
           color="info"
-          @click="() => addShelveDialog = true"
+          @click="() => addShelfDialog = true"
         />
       </v-app-bar>
       <v-main>
@@ -109,9 +120,9 @@ watch(loader, (value) => {
       </v-progress-circular>
     </v-overlay>
     <add-category-dialog
-      :dialog="addShelveDialog"
-      @add="onAddShelve"
-      @close="addShelveDialog = false"
+      :dialog="addShelfDialog"
+      @add="onAddShelf"
+      @close="addShelfDialog = false"
     />
   </v-app>
 </template>

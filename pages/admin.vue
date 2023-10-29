@@ -2,9 +2,11 @@
 import { getUnixTime } from 'date-fns';
 import { storeToRefs } from 'pinia'
 import { useShelvesStore } from '@/stores/shelves'
+import { useToastStore } from '@/stores/toast'
 
-const shelveStore = useShelvesStore();
-const { getShelves } = storeToRefs(shelveStore);
+const shelvesStore = useShelvesStore();
+const toastStore = useToastStore();
+const { getShelves } = storeToRefs(shelvesStore);
 
 const shelves = computed(() => getShelves.value);
 
@@ -19,11 +21,13 @@ const viewImage = (image) => {
 }
 
 const onApprove = (item) => {
-  shelveStore.approveImage(item.id, item)
+  shelvesStore.approveImage(item.id, item);
+  toastStore.showToast('Image approved successfully', 'success');
 }
 
 const onReject = (item) => {
-  shelveStore.rejectImage(item.id, item)
+  shelvesStore.rejectImage(item.id, item);
+  toastStore.showToast('Image rejected successfully', 'success');
 }
 </script>
 

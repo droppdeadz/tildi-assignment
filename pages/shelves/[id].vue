@@ -2,13 +2,16 @@
 import { storeToRefs } from 'pinia'
 import { useShelvesStore } from '@/stores/shelves'
 import { useLoaderStore } from '@/stores/loader'
+import { useToastStore } from '@/stores/toast'
+
+const shelvesStore = useShelvesStore();
+const loaderStore = useLoaderStore();
+const toastStore = useToastStore();
 
 const { id } = useRoute().params;
-const shelveStore = useShelvesStore();
-const loaderStore = useLoaderStore();
-const { getShelveById } = storeToRefs(shelveStore);
+const { getShelfById } = storeToRefs(shelvesStore);
 const { getLoader } = storeToRefs(loaderStore);
-const shelf = getShelveById.value(id);
+const shelf = getShelfById.value(id);
 const loader = computed(() => getLoader.value);
 
 const breadcrumbs = [
@@ -47,15 +50,16 @@ const onUpload = () => {
 }
 
 onMounted(() => {
-  shelveStore.selectedShelve(shelf);
+  shelvesStore.selectedShelf(shelf);
 });
 
 watch(loader, (value) => {
   if (!value) {
-    shelveStore.addedImages(previewImage.value.src);
+    shelvesStore.addedImages(previewImage.value.src);
     previewImage.value.src = 'https://placehold.co/300x300/EEE/31343C';
     previewImage.value.isSelected = false;
     file.value = null;
+    toastStore.showToast('Uploaded image successfully', 'success');
   }
 });
 

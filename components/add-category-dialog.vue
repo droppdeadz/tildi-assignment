@@ -33,13 +33,15 @@ const onClearImage = () => {
   payload.image = null;
 }
 
-const addShelve = () => {
+const addShelf = () => {
   emits('add', payload);
+  payload.name = '';
   onClearImage();
 };
 
 const closeDialog = () => {
   emits('close');
+  payload.name = '';
   onClearImage();
 };
 
@@ -57,11 +59,11 @@ const closeDialog = () => {
         max-width="344"
       >
         <v-card-title>
-          Add Shelve
+          Add Shelf
         </v-card-title>
         
         <v-card-subtitle>
-          Add Shelve categroy
+          Add Shelf categroy
         </v-card-subtitle>
 
         <v-card-text>
@@ -109,7 +111,7 @@ const closeDialog = () => {
           <v-btn
             color="info"
             variant="tonal"
-            @click="addShelve"
+            @click="addShelf"
             :disabled="payload.name && !payload.image"
           >
             Add
