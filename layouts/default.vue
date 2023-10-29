@@ -4,6 +4,7 @@ import { useLoaderStore } from '@/stores/loader'
 import { useShelvesStore } from '@/stores/shelves'
 import uniqueId from 'lodash/uniqueId';
 
+const router = useRouter();
 const loaderStore = useLoaderStore();
 const shelveStore = useShelvesStore();
 const { getLoader } = storeToRefs(loaderStore);
@@ -38,6 +39,7 @@ const onAddShelve = (shelve) => {
     id: `new_${uniqueId()}`,
   });
   addShelveDialog.value = false;
+  router.push('/');
 }
 
 watch(loader, (value) => {

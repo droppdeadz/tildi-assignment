@@ -51,6 +51,7 @@ export const useShelvesStore = defineStore('shelves', {
   },
   actions: {
     addedShelves(shelve) {
+      if (this.shelves.some((s) => String(s.name).toLowerCase() == String(shelve.name).toLowerCase())) return;
       this.shelves.push(shelve);
     },
     selectedShelve(shelve) {
