@@ -35,7 +35,7 @@ const onAddShelve = (shelve) => {
   shelveStore.addedShelves({
     ...shelve,
     images: [],
-    id: uniqueId(),
+    id: `new_${uniqueId()}`,
   });
   addShelveDialog.value = false;
 }

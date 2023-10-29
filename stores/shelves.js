@@ -5,25 +5,25 @@ export const useShelvesStore = defineStore('shelves', {
   state: () => ({
     shelves: [
       {
-        id: 1,
+        id: '1',
         name: 'Beverage',
         image: '/images/beverages.jpg',
         images: [],
       },
       {
-        id: 2,
+        id: '2',
         name: 'Snacks',
         image: '/images/snacks.webp',
         images: [],
       },
       {
-        id: 3,
+        id: '3',
         name: 'Cosmetics',
         image: '/images/cosmetics.jpg',
         images: [],
       },
       {
-        id: 4,
+        id: '4',
         name: 'Foods',
         image: '/images/foods.jpg',
         images: [],
@@ -32,8 +32,11 @@ export const useShelvesStore = defineStore('shelves', {
     shelve: {},
   }),
   getters: {
+    getShelves: (state) =>  {
+      return state.shelves;
+    },
     getShelveById: (state) => {
-      return (id) => state.shelves.find((shelve) => shelve.id === Number(id))
+      return (id) => state.shelves.find((shelve) => shelve.id === id)
     },
     getAllImages: (state) => {
       return state.shelves.map((shelve) => {

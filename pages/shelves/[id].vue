@@ -8,7 +8,7 @@ const shelveStore = useShelvesStore();
 const loaderStore = useLoaderStore();
 const { getShelveById } = storeToRefs(shelveStore);
 const { getLoader } = storeToRefs(loaderStore);
-const shelve = getShelveById.value(id);
+const shelf = getShelveById.value(id);
 const loader = computed(() => getLoader.value);
 
 const breadcrumbs = [
@@ -18,7 +18,7 @@ const breadcrumbs = [
     to: '/',
   },
   {
-    title: shelve.name,
+    title: shelf.name,
     disabled: true,
   },
 ]
@@ -47,7 +47,7 @@ const onUpload = () => {
 }
 
 onMounted(() => {
-  shelveStore.selectedShelve(shelve);
+  shelveStore.selectedShelve(shelf);
 });
 
 watch(loader, (value) => {
@@ -60,7 +60,7 @@ watch(loader, (value) => {
 });
 
 useHead({
-  title: `Tildi Assignment - ${shelve.name}`,
+  title: `Tildi Assignment - ${shelf.name}`,
   meta: [
     { name: 'description', content: 'Tildi assignment project.' }
   ],
@@ -133,12 +133,12 @@ useHead({
   <div class="py-5">
     <p class="font-extrabold text-xl mb-3">History</p>
     <v-row dense>
-      <v-col cols="12" v-if="shelve.images.length === 0">
+      <v-col cols="12" v-if="shelf.images.length === 0">
         No images found
       </v-col>
       <v-col
         v-else
-        :key="`${idx} - ${Math.random() * 10}`" v-for="(image, idx) in shelve.images"
+        :key="`${idx} - ${Math.random() * 10}`" v-for="(image, idx) in shelf.images"
         cols="6"
         sm="4"
       >

@@ -1,108 +1,59 @@
 <script setup>
-import { format, getUnixTime } from 'date-fns';
+import { getUnixTime } from 'date-fns';
 import { storeToRefs } from 'pinia'
 import { useShelvesStore } from '@/stores/shelves'
 
 const shelveStore = useShelvesStore();
-const { getAllImages } = storeToRefs(shelveStore);
+const { getShelves } = storeToRefs(shelveStore);
 
-const images = computed(() => getAllImages.value);
+const shelves = computed(() => getShelves.value);
+
 const dialog = ref(false);
 const imageSelect = ref(null);
 
-const getColor = (status) => {
-  if (status === 'rejected') {
-    return 'error';
-  } else if (status === 'pending') {
-    return 'warning';
-  } else {
-    return 'success';
-  }
-};
+const getImages = (shelf) => shelf.images.map((image) => ({ id: shelf.id, ...image }))
 
-const openDialog = (image) => {
+const viewImage = (image) => {
   dialog.value = true;
   imageSelect.value = image;
+}
+
+const onApprove = (item) => {
+  shelveStore.approveImage(item.id, item)
+}
+
+const onReject = (item) => {
+  shelveStore.rejectImage(item.id, item)
 }
 </script>
 
 <template>
   <div>
-    <!-- <v-table
-      density="compact"
-      hover
-    >
-      <thead>
-        <tr>
-          <th class="text-left text-sm">
-            Image
-          </th>
-          <th class="text-left text-sm px-1 whitespace-nowrap w-[1%]">
-            Upload Date
-          </th>
-          <th class="text-left text-sm px-1 whitespace-nowrap w-[1%]">
-            Status
-          </th>
-          <th class="w-[1%] px-1"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-if="images.length > 0">
-          <tr
-            v-for="item in images"
-            :key="`${getUnixTime(item.uploadDate)}`"
-          >
-            <td>
-              <div class="aspect-square rounded overflow-hidden max-h-20 my-2" @click="() => openDialog(item)">
-                <v-img
-                  :src="item.image"
-                  cover
-                  :alt="`${getUnixTime(item.uploadDate)}`"
-                ></v-img>  
-              </div>
-            </td>
-            <td class="whitespace-nowrap px-1">
-              <p class="text-sm">{{ format(item.uploadDate, 'MM/dd/yyyy, HH:mm') }}</p>
-            </td>
-            <td class="text-center px-1">
-              <v-chip
-                :color="getColor(item.status)"
-                size="small"
-                variant="elevated"
-                elevation="0"
-                class="capitalize"
-              >
-                {{ item.status }}
-              </v-chip>  
-            </td>
-            <td class="pl-1">
-              <div v-if="item.status === 'pending'" class="flex gap-1">
-                <v-btn
-                  size="x-small"
-                  icon="mdi-check"
-                  color="success"
-                  @click="() => shelveStore.approveImage(item.id, item)"
-                />
-                <v-btn
-                  size="x-small"
-                  icon="mdi-close"
-                  color="error"
-                  @click="() => shelveStore.rejectImage(item.id, item)"
-                />
-              </div>
-            </td>
-          </tr>
-        </template>
-        <tr v-else>
-          <td
-            colspan="4"
-            class="text-center"
-          >
-            No images found
-          </td>
-        </tr>
-      </tbody>
-    </v-table> -->
+    <div v-if="shelves.some((shelf) => shelf.images.length > 0)" class="flex flex-col gap-5">
+      <template
+        v-for="(shelf) in shelves"
+        :key="`${shelf.name}`"
+      >
+        <v-card
+          v-if="shelf.images.length > 0"
+          elevation="0"
+          class="border"
+        >
+          <v-card-title class="!text-base">
+            {{ shelf.name }}
+          </v-card-title>
+          <admin-images-table
+            :rows="getImages(shelf)"
+            @approve="onApprove"
+            @reject="onReject"
+            @onSelect="viewImage"
+          />
+        </v-card>
+      </template>
+    </div>
+    <div v-else>
+      No images found
+    </div>
     <v-dialog
       v-if="imageSelect"
       v-model="dialog"
@@ -110,7 +61,7 @@ const openDialog = (image) => {
       max-width="500"
     >
       <div class="relative">
-        <v-card>
+        <v-card class="max-h-[475px] overflow-hidden">
           <v-img
             :src="imageSelect.image"
             cover
